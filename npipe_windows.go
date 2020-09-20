@@ -400,6 +400,7 @@ type iodata struct {
 // abort due to hitting the specified deadline. Deadline may be set to nil to wait forever. If no request is pending,
 // the content of iodata is returned.
 func (c *PipeConn) completeRequest(data iodata, deadline *time.Time, overlapped *syscall.Overlapped) (int, error) {
+
 	if data.err == error_io_incomplete || data.err == syscall.ERROR_IO_PENDING {
 		var timer <-chan time.Time
 		if deadline != nil {
@@ -520,7 +521,7 @@ func createPipe(address string, first bool) (syscall.Handle, error) {
 		mode,
 		pipe_type_byte,
 		pipe_unlimited_instances,
-		512, 512, 0, nil)
+		0, 0, 0, nil)
 }
 
 func badAddr(addr string) PipeError {
